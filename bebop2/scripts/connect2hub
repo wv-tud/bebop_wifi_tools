@@ -1,21 +1,10 @@
 #!/bin/sh
-
-# RED > ORANGE > GREEN > OFF > GREEN 	: swarmhub wifi found, DHCP lease obtained 
-# RED > ORANGE > OFF > GREEN 		: swarmhub wifi found, no DHCP lease obtained
-# RED > OFF > GREEN 			: no swarmhub wifi found
-
 # on startup the system is not quite ready when called, so lets play it safe and wait a while
 sleep 6
-
-# set LED to red
-BLDC_Test_Bench -G 1 0 0 >/dev/null
 
 # see if wifi network with SSID swarmhub is available
 if (bcmwl escanresults | grep "swarmhub")
 then
-	# set LED to orange
-	BLDC_Test_Bench -G 1 1 0 >/dev/null
-	
 	# disable wifi and bring back up again
 	ifconfig eth0 down
 	bcmwl down
@@ -42,9 +31,6 @@ then
 		# set IP address according DHCP lease and print IP
 		ifconfig eth0 $dhcpip netmask 255.255.255.0 up
 		echo DHCP success, using IP $dhcpip
-		
-		# set light to green
-		BLDC_Test_Bench -G 0 1 0 >/dev/null
 	else
 		# print status and static IP
 		echo DHCP failed, using static IP 192.168.40.2
@@ -54,13 +40,7 @@ else
 	echo SSID not found
 fi
 
-# turn LED off
-BLDC_Test_Bench -G 0 0 0 >/dev/null
-
 # Telnet & adb                                                      
 echo "Starting telnet & adb" | ulogger -t "NetworkUSB" -p I         
 /usr/sbin/telnetd -l /bin/login.sh                                  
 /usr/bin/pstart adbd
-
-# set LED back to green to show the script has completed
-BLDC_Test_Bench -G 0 1 0 >/dev/null
