@@ -5,7 +5,7 @@ then
 IP="192.168.42.1"
 echo "No drone ID specified, using ($IP)"
 else
-IP="192.168.40.$1"
+IP="$1"
 echo "Drone ID specified, using ($IP)"
 fi
 

@@ -1,5 +1,0 @@
-#!/bin/sh
-# Telnet & adb                                                      
-echo "Starting telnet & adb" | ulogger -t "NetworkUSB" -p I         
-/usr/sbin/telnetd -l /bin/login.sh                                  
-/usr/bin/pstart adbd
